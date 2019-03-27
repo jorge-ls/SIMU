@@ -8,23 +8,39 @@ Borrador borrador;
 Boton btnLapiz,btnElipse,btnRect,btnTriangle,btnFill,btnStroke,btnRubber,btnSave;
 static int opcion = -1;
 PImage imgBorrador;
+int anchBoton = 80;
+int altBoton = 100;
+float x1 = 700;
+float x2= 700;
+float grosor = 1;
+float alfa = 255;
+
 
 void setup(){
     background(255);
     size(1000,600);
-    btnLapiz = new Boton(0,0,width/10,height/5,"Lapiz","pencil.png");
-    btnElipse = new Boton(width/10,0,width/10,height/5,"Elipse","elipse2.png");
-    btnRect = new Boton((width/10)*2,0,width/10,height/5,"Rectangulo","rectangulo.png");
-    btnTriangle = new Boton((width/10)*3,0,width/10,height/5,"Triangulo","triangle.png");
-    btnFill = new Boton((width/10)*4,0,width/10,height/5,"FillColor","fill2.png");
-    btnStroke = new Boton((width/10)*5,0,width/10,height/5,"StrokeColor","stroke.png");
-    btnRubber = new Boton((width/10)*6,0,width/10,height/5,"Rubber","rubber.png");
-    btnSave = new Boton((width/10)*7,0,width/10,height/5,"Save","save.png");
+    btnLapiz = new Boton(0,0,anchBoton,height/5,"Lapiz","pencil.png");
+    btnElipse = new Boton(anchBoton,0,anchBoton,height/5,"Elipse","elipse2.png");
+    btnRect = new Boton(anchBoton*2,0,anchBoton,height/5,"Rectangulo","rectangulo.png");
+    btnTriangle = new Boton(anchBoton*3,0,anchBoton,height/5,"Triangulo","triangle.png");
+    btnFill = new Boton(anchBoton*4,0,anchBoton,height/5,"FillColor","fill2.png");
+    btnStroke = new Boton(anchBoton*5,0,anchBoton,height/5,"StrokeColor","stroke.png");
+    btnRubber = new Boton(anchBoton*6,0,anchBoton,height/5,"Rubber","rubber.png");
+    btnSave = new Boton(anchBoton*7,0,anchBoton,height/5,"Save","save.png");
     //Se dibuja el lienzo 
     lienzo = new Lienzo(0,height/5,width,height-height/5);
+    lienzo.display();
+    
+    
+}
+
+void draw(){
+    //background(255);
+    stroke(0);
+    strokeWeight(1);
     Panel panel = new Panel(0,0,width,height/5);
     panel.display();
-    lienzo.display();
+   
     paleta = new JColorChooser();
     btnLapiz.display();
     btnElipse.display();
@@ -34,14 +50,17 @@ void setup(){
     btnStroke.display();
     btnRubber.display();
     btnSave.display();
-}
-
-void draw(){
-    //fill(160);
-    //rect(0,0,width,height/5);
-    //Se dibujan los botones
-    //mouseMoved();
-    
+    //Se dibujan los scrollbars
+    strokeWeight(3);
+    line(700,50,900,50);
+    line(700,80,900,80);
+    x1 = constrain(x1,700,900);
+    x2 = constrain(x2,700,900);
+    fill(0);
+    rect(x1,45,10,10);
+    rect(x2,75,10,10);
+    text("Transparencia: ",650,50);
+    text("Grosor: ",650,80);
 }
 
 boolean isDentroLienzo(){
@@ -50,7 +69,18 @@ boolean isDentroLienzo(){
 
 
 void mouseDragged(){
-    lienzo.mouseDragged();
+    if (mouseX >= 700 && mouseY >=40 && mouseY <=60){
+       x1+= mouseX - pmouseX; 
+       alfa = map(x1,700,900,0,255);
+    }
+    else if (mouseX >= 700 && mouseY>=70 && mouseY <=90){
+       x2+= mouseX - pmouseX; 
+       grosor = map(x2,700,900,1,10);
+    }
+    else {
+        lienzo.mouseDragged();  
+    }
+    
 }
 
 void mousePressed(){

@@ -66,7 +66,8 @@ class Lienzo{
  void mouseDragged(){
      if (editorGrafico.opcion == 0){
        if (isDentroLienzo()){
-           stroke(selectedStroke.getRGB()); 
+           stroke(selectedStroke.getRGB());
+           strokeWeight(grosor);
            line(mouseX,mouseY,pmouseX,pmouseY);  
        }
         
@@ -103,16 +104,16 @@ class Lienzo{
      void mouseReleased(){
         if (editorGrafico.opcion == 1){
           stroke(selectedStroke.getRGB());
-          //fill(selectedFill.getRGB());
-          noFill();
+          strokeWeight(grosor);
+          fill(selectedFill.getRGB(),255-alfa);
           ellipseMode(CORNER);
           ellipse(puntoOrigen.getPosX(),puntoOrigen.getPosY(),elipseX,elipseY);
-          puntoFinal.setPos(0,0);
+
         }
         else if (editorGrafico.opcion == 2){
           stroke(selectedStroke.getRGB());
-          //fill(selectedFill.getRGB());
-          noFill();
+          strokeWeight(grosor);
+          fill(selectedFill.getRGB(),255-alfa);
           rect(puntoOrigen.getPosX(),puntoOrigen.getPosY(),recX,recY);
           
         }
