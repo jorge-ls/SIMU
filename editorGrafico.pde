@@ -1,11 +1,13 @@
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Color;
 
 JColorChooser paleta;
 Lienzo lienzo;
 Panel panel;
 Borrador borrador;
-Boton btnLapiz,btnElipse,btnRect,btnTriangle,btnFill,btnStroke,btnRubber,btnSave;
+Boton btnLapiz,btnElipse,btnRect,btnTriangle,btnFill,btnStroke,btnRubber,btnSave,btnOpen;
 static int opcion = -1;
 PImage imgBorrador;
 int anchBoton = 80;
@@ -20,13 +22,14 @@ void setup(){
     background(255);
     size(1000,600);
     btnLapiz = new Boton(0,0,anchBoton,height/5,"Lapiz","pencil.png");
-    btnElipse = new Boton(anchBoton,0,anchBoton,height/5,"Elipse","elipse2.png");
+    btnElipse = new Boton(anchBoton,0,anchBoton,height/5,"Elipse","elipse.png");
     btnRect = new Boton(anchBoton*2,0,anchBoton,height/5,"Rectangulo","rectangulo.png");
     btnTriangle = new Boton(anchBoton*3,0,anchBoton,height/5,"Triangulo","triangle.png");
     btnFill = new Boton(anchBoton*4,0,anchBoton,height/5,"FillColor","fill2.png");
     btnStroke = new Boton(anchBoton*5,0,anchBoton,height/5,"StrokeColor","stroke.png");
     btnRubber = new Boton(anchBoton*6,0,anchBoton,height/5,"Rubber","rubber.png");
     btnSave = new Boton(anchBoton*7,0,anchBoton,height/5,"Save","save.png");
+    btnOpen = new Boton(anchBoton*8,0,anchBoton,height/5,"Open","openFile.png");
     //Se dibuja el lienzo 
     lienzo = new Lienzo(0,height/5,width,height-height/5);
     lienzo.display();
@@ -50,6 +53,7 @@ void draw(){
     btnStroke.display();
     btnRubber.display();
     btnSave.display();
+    btnOpen.display();
     //Se dibujan los scrollbars
     strokeWeight(3);
     line(700,50,900,50);
@@ -94,33 +98,46 @@ void mouseReleased(){
 void mouseMoved(){
    if (editorGrafico.opcion == 4) {
      //if (borrador.isDentroBorrador()){
-        borrador.display(mouseX,mouseY);
+        //borrador.display(mouseX,mouseY);
      //}
+   }
+}
+
+
+void checkCursor(){
+   if (editorGrafico.opcion == 4){
+      cursor(ARROW); 
    }
 }
 
 void mouseClicked(){
     if (btnLapiz.isDentroBoton()){
         print("Boton lapiz seleccionado\n");
+        checkCursor();
         editorGrafico.opcion = 0; //Opcion lapiz
     }
     else if (btnElipse.isDentroBoton()){
         print("Elipse Seleccionado\n");
+        checkCursor();
         editorGrafico.opcion = 1; //Opción elipse
     }
     else if (btnRect.isDentroBoton()){
+        checkCursor();
         print("Rectangulo Seleccionado\n");
         editorGrafico.opcion = 2; //opcion rectangulo 
     }
     else if (btnTriangle.isDentroBoton()){
+        checkCursor();
         print("Triangulo Seleccionado\n");
         editorGrafico.opcion = 3; //Opcion triangulo
     }
     else if (btnFill.isDentroBoton()){
+       checkCursor(); 
        Color selectedFill = JColorChooser.showDialog(null,"Paleta de colores",Color.white);
        lienzo.setFillColor(selectedFill);
     }
     else if (btnStroke.isDentroBoton()){
+       checkCursor();
        Color selectedStroke = JColorChooser.showDialog(null,"Paleta de colores",Color.white);
        lienzo.setStrokeColor(selectedStroke);
     }
@@ -128,19 +145,35 @@ void mouseClicked(){
       //if (editorGrafico.opcion != 4 ){
          print("Entra borrador");
          editorGrafico.opcion = 4; //Opcion borrar
-         borrador = new Borrador(mouseX,mouseY,50,50);
-         borrador.display(mouseX,mouseY);
-         //displayBorrador(mouseX,mouseY);
-         //mouseMoved();
+         PImage imgBorrador = loadImage("borrador.png");
+         cursor(imgBorrador,10,10);
       //}
     }
     else if (btnSave.isDentroBoton()){
+         checkCursor();
          editorGrafico.opcion = 5;
          //loadPixels();
-         
          lienzo.saveImagen();
     }
+    else if (btnOpen.isDentroBoton()){
+         checkCursor();
+         //selectInput("Selecciona un fichero para abrir","file");
+         JFileChooser fileChooser = new JFileChooser();
+         fileChooser.showOpenDialog(null);
+         //if (seleccion == JFileChooser.APROVE_OPTION){
+         File fichero = fileChooser.getSelectedFile();
+         //}
+         if (fichero == null){
+            println("No se ha seleccionado ningun fichero"); 
+         }
+         else{
+             String fileName = fichero.getName();
+             PImage imgSelected = loadImage(fileName); 
+             image(imgSelected,0,height/5,width,height-height/5);
+         }
+         
+         
   }
     
-
+}
      

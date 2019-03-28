@@ -51,12 +51,13 @@ class Lienzo{
   
   //Guarda la imagen 
   void saveImagen(){
+     //PImage imagen = get(0,height/5,width,height-height/5);
      save("saves/imagen.png"); 
   }
   
  void mousePressed(){
+      //println("Entra mouse pressed");
       puntoOrigen = new Punto(mouseX,mouseY);
-      //mouseDragged();
   }
   
   void mouseMoved(){
@@ -74,33 +75,24 @@ class Lienzo{
      }
      else if (editorGrafico.opcion == 1){
         puntoFinal = new Punto(mouseX,mouseY);
-        print("Punto final x: "+puntoFinal.getPosX()+"\n");
-         print("Punto final y: "+puntoFinal.getPosY()+"\n");
         elipseX = puntoFinal.getPosX() - puntoOrigen.getPosX();
         elipseY = puntoFinal.getPosY() - puntoOrigen.getPosY();
-        
-        /*stroke(0);
-        noFill();
-        ellipseMode(CORNER);
-        ellipse(puntoOrigen.getPosX(),puntoOrigen.getPosY(),elipseX,elipseY);*/
+        //println("PuntoFinal.x: "+elipseX);
+        //println("PuntoFinal.y: "+elipseY);
      }
      else if (editorGrafico.opcion == 2){
         puntoFinal = new Punto(mouseX,mouseY);
         recX = puntoFinal.getPosX() - puntoOrigen.getPosX();
         recY = puntoFinal.getPosY() - puntoOrigen.getPosY();
-     
-        /*stroke(0);
-        noFill();
-        rect(puntoOrigen.getPosX(),puntoOrigen.getPosY(),recX,recY);*/
      }
-     /*else if (editorGrafico.opcion == 3){
-        puntoFinal = new Punto(mouseX,mouseY);
-        triX = puntoFinal.getPosX();
-        triY = puntoFinal.getPosY();
-      }*/
-      //else if ()
-       
+     //Accion del borrador
+     else if (editorGrafico.opcion == 4){
+         fill(255);
+         strokeWeight(10);
+         stroke(255);
+         line(mouseX,mouseY,pmouseX,pmouseY);  
      }
+  }
      void mouseReleased(){
         if (editorGrafico.opcion == 1){
           stroke(selectedStroke.getRGB());
@@ -108,14 +100,16 @@ class Lienzo{
           fill(selectedFill.getRGB(),255-alfa);
           ellipseMode(CORNER);
           ellipse(puntoOrigen.getPosX(),puntoOrigen.getPosY(),elipseX,elipseY);
-
+          elipseX = 0;
+          elipseY = 0;
         }
         else if (editorGrafico.opcion == 2){
           stroke(selectedStroke.getRGB());
           strokeWeight(grosor);
           fill(selectedFill.getRGB(),255-alfa);
           rect(puntoOrigen.getPosX(),puntoOrigen.getPosY(),recX,recY);
-          
+          recX = 0;
+          recY = 0;
         }
      }
      
