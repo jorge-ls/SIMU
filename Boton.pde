@@ -35,7 +35,7 @@ class Boton {
     
   }
   boolean isDentroBoton(){
-      if (mouseX > posX && mouseX < anchura +posX && mouseY > posY && mouseY < altura){
+      if (mouseX > posX && mouseX < anchura +posX && mouseY > posY && mouseY < altura + posY){
          //print("Entra true\n");
          return true; 
       }

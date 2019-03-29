@@ -21,6 +21,7 @@ class Lienzo{
   
   void display(){
      fill(255);
+     strokeWeight(1);
      rect(posX,posY,anchura,altura);
      
   }
@@ -36,6 +37,7 @@ class Lienzo{
   //Se selecciona el color de relleno
   
   void setFillColor(Color selectColor){
+      println("Se ha seleccionado un color");
       this.selectedFill = selectColor;
   }
   
@@ -43,6 +45,18 @@ class Lienzo{
   
   void setStrokeColor(Color selectedColor){
      this.selectedStroke = selectedColor; 
+  }
+  
+  //Devuelve el color de relleno seleccionado
+  
+  Color getFillColor(){
+     return selectedFill; 
+  }
+  
+  //Devuleve el color de trazo seleccionado
+  
+  Color getStrokeColor(){
+     return selectedStroke; 
   }
   
   /*void mouseClicked(){
@@ -54,6 +68,13 @@ class Lienzo{
      //PImage imagen = get(0,height/5,width,height-height/5);
      save("saves/imagen.png"); 
   }
+  
+ void mouseClicked(){
+      if (editorGrafico.opcion == 6){
+           text("",mouseX,mouseY,50,50); 
+      }
+   
+ }
   
  void mousePressed(){
       //println("Entra mouse pressed");
@@ -85,6 +106,11 @@ class Lienzo{
         recX = puntoFinal.getPosX() - puntoOrigen.getPosX();
         recY = puntoFinal.getPosY() - puntoOrigen.getPosY();
      }
+     else if (editorGrafico.opcion == 3){
+        puntoFinal = new Punto(mouseX,mouseY);
+        triX = puntoFinal.getPosX() - puntoOrigen.getPosX();
+        triY = puntoFinal.getPosY() - puntoOrigen.getPosY();
+     }
      //Accion del borrador
      else if (editorGrafico.opcion == 4){
          fill(255);
@@ -110,6 +136,14 @@ class Lienzo{
           rect(puntoOrigen.getPosX(),puntoOrigen.getPosY(),recX,recY);
           recX = 0;
           recY = 0;
+        }
+        else if (editorGrafico.opcion == 3){
+          stroke(selectedStroke.getRGB());
+          strokeWeight(grosor);
+          fill(selectedFill.getRGB(),255-alfa);
+          triangle(puntoOrigen.getPosX(),puntoOrigen.getPosY(),triX,triY,puntoFinal.getPosX(),puntoFinal.getPosY());
+          triX = 0;
+          triY = 0;
         }
      }
      

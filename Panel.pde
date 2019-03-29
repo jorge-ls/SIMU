@@ -11,7 +11,7 @@ class Panel{
   }
   
   void display(){
-      fill(160);
+      fill(#5D92E5);
       rect(posX,posY,anchura,altura);
       
   }

@@ -6,30 +6,40 @@ import java.awt.Color;
 JColorChooser paleta;
 Lienzo lienzo;
 Panel panel;
-Borrador borrador;
-Boton btnLapiz,btnElipse,btnRect,btnTriangle,btnFill,btnStroke,btnRubber,btnSave,btnOpen;
+Boton btnLapiz,btnElipse,btnRect,btnTriangle,btnFill,btnStroke,btnRubber,btnSave,btnOpen,btnText,btnBN,btnUmbral;
+Boton btnInvert,btnSatur,btnRestore,btnNew;
 static int opcion = -1;
 PImage imgBorrador;
-int anchBoton = 80;
-int altBoton = 100;
+PImage imgSelected;
+int anchBoton = 60;
+int altBoton = 60;
 float x1 = 700;
 float x2= 700;
 float grosor = 1;
-float alfa = 255;
+float alfa = 0;
 
 
 void setup(){
     background(255);
     size(1000,600);
-    btnLapiz = new Boton(0,0,anchBoton,height/5,"Lapiz","pencil.png");
-    btnElipse = new Boton(anchBoton,0,anchBoton,height/5,"Elipse","elipse.png");
-    btnRect = new Boton(anchBoton*2,0,anchBoton,height/5,"Rectangulo","rectangulo.png");
-    btnTriangle = new Boton(anchBoton*3,0,anchBoton,height/5,"Triangulo","triangle.png");
-    btnFill = new Boton(anchBoton*4,0,anchBoton,height/5,"FillColor","fill2.png");
-    btnStroke = new Boton(anchBoton*5,0,anchBoton,height/5,"StrokeColor","stroke.png");
-    btnRubber = new Boton(anchBoton*6,0,anchBoton,height/5,"Rubber","rubber.png");
-    btnSave = new Boton(anchBoton*7,0,anchBoton,height/5,"Save","save.png");
-    btnOpen = new Boton(anchBoton*8,0,anchBoton,height/5,"Open","openFile.png");
+    btnNew = new Boton(0,0,anchBoton,altBoton,"Nuevo","new.png");
+    btnLapiz = new Boton(anchBoton,0,anchBoton,altBoton,"Lapiz","pencil.png");
+    btnElipse = new Boton(anchBoton*2,0,anchBoton,altBoton,"Elipse","elipse.png");
+    btnRect = new Boton(anchBoton*3,0,anchBoton,altBoton,"Rectangulo","rectangulo.png");
+    btnTriangle = new Boton(anchBoton*4,0,anchBoton,altBoton,"Triangulo","triangle.png");
+    btnFill = new Boton(anchBoton*5,0,anchBoton,altBoton,"FillColor","fill2.png");
+    btnStroke = new Boton(anchBoton*6,0,anchBoton,altBoton,"StrokeColor","stroke.png");
+    btnRubber = new Boton(anchBoton*7,0,anchBoton,altBoton,"Rubber","rubber.png");
+    btnSave = new Boton(anchBoton*8,0,anchBoton,altBoton,"Save","save.png");
+    btnOpen = new Boton(anchBoton*9,0,anchBoton,altBoton,"Open","openFile.png");
+    btnText = new Boton(0,altBoton,anchBoton,altBoton,"Texto","text.png");
+    btnRestore = new Boton(anchBoton,altBoton,anchBoton,altBoton,"Restaurar","restore.png");
+    btnBN = new Boton(anchBoton*2,altBoton,anchBoton,altBoton,"BlancoNegro","blancoNegro.png");
+    btnUmbral = new Boton(anchBoton*3,altBoton,anchBoton,altBoton,"Umbral","threshold.png");
+    btnInvert = new Boton(anchBoton*4,altBoton,anchBoton,altBoton,"Negativo","invert.png");
+    btnSatur = new Boton(anchBoton*5,altBoton,anchBoton,altBoton,"Saturacion","satur.png");
+    
+    
     //Se dibuja el lienzo 
     lienzo = new Lienzo(0,height/5,width,height-height/5);
     lienzo.display();
@@ -45,6 +55,7 @@ void draw(){
     panel.display();
    
     paleta = new JColorChooser();
+    btnNew.display();
     btnLapiz.display();
     btnElipse.display();
     btnRect.display();
@@ -54,6 +65,12 @@ void draw(){
     btnRubber.display();
     btnSave.display();
     btnOpen.display();
+    btnText.display();
+    btnBN.display();
+    btnUmbral.display();
+    btnInvert.display();
+    btnSatur.display();
+    btnRestore.display();
     //Se dibujan los scrollbars
     strokeWeight(3);
     line(700,50,900,50);
@@ -63,8 +80,8 @@ void draw(){
     fill(0);
     rect(x1,45,10,10);
     rect(x2,75,10,10);
-    text("Transparencia: ",650,50);
-    text("Grosor: ",650,80);
+    text("Transparencia: ",610,50);
+    text("Grosor: ",610,80);
 }
 
 boolean isDentroLienzo(){
@@ -168,12 +185,56 @@ void mouseClicked(){
          }
          else{
              String fileName = fichero.getName();
-             PImage imgSelected = loadImage(fileName); 
+             imgSelected = loadImage(fileName); 
              image(imgSelected,0,height/5,width,height-height/5);
          }
-         
-         
+     }
+      else if (btnText.isDentroBoton()){
+          checkCursor();
+          println("Opcion editar texto");
+          editorGrafico.opcion = 6; //Opcion texto
+      }
+      else if (btnRestore.isDentroBoton()){
+          checkCursor();
+          if (imgSelected != null){
+              image(imgSelected,0,height/5,width,height-height/5);
+          }
+          
+      }
+      else if (btnNew.isDentroBoton()){
+            lienzo = new Lienzo(0,height/5,width,height-height/5);
+            lienzo.display();
+      }
+      else if (btnBN.isDentroBoton()){
+          checkCursor();
+          loadPixels();
+          for (int i=0;i< pixels.length; i++){
+              color c = pixels[i];
+              pixels[i] = color(red(c)*0.3+green(c)*0.59+blue(c)*0.11);
+          }
+          updatePixels();
+      }
+      else if (btnUmbral.isDentroBoton()){
+           checkCursor();
+           filter(THRESHOLD,0.7);
+      }
+      else if (btnInvert.isDentroBoton()){
+           checkCursor();
+           filter(INVERT);
+      }
+      else if (btnSatur.isDentroBoton()){
+          checkCursor();
+          colorMode(HSB);
+          loadPixels();
+          for (int i=0;i< pixels.length; i++){
+              float b = brightness(pixels[i]);
+              float s = saturation(pixels[i]);
+              float h = hue(pixels[i]);
+              pixels[i] = color(h,s*2,b);
+          }
+          updatePixels();
+      }
   }
     
-}
+
      
