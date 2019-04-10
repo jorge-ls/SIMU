@@ -8,6 +8,8 @@ class Lienzo{
  int elipseX,elipseY,recX,recY,triX,triY;
  Color selectedFill;
  Color selectedStroke;
+ String typing = "";
+ String saved = "";
  
   Lienzo(float posicionX,float posicionY,float ancLienzo,float altLienzo){
     posX = posicionX;
@@ -19,20 +21,12 @@ class Lienzo{
     
   }
   
-  void display(){
-     fill(255);
-     strokeWeight(1);
-     rect(posX,posY,anchura,altura);
-     
-  }
   
   void setTam(float anchura,float altura){
        this.anchura = anchura;
        this.altura = altura;
   }
-  void run(){
-    lienzo.display();
-  }
+  
   
   //Se selecciona el color de relleno
   
@@ -65,20 +59,34 @@ class Lienzo{
   
   //Guarda la imagen 
   void saveImagen(){
-     //PImage imagen = get(0,height/5,width,height-height/5);
-     save("saves/imagen.png"); 
-  }
-  
- void mouseClicked(){
-      if (editorGrafico.opcion == 6){
-           text("",mouseX,mouseY,50,50); 
+      PImage imagen = createImage(width,(height-height/5)-1,RGB);
+      loadPixels();
+      imagen.loadPixels();
+      for (int i= width * ((height/5)+1); i < pixels.length; i++){
+         imagen.pixels[i- width * ((height/5)+1)] = pixels[i];     
       }
+      imagen.save("saves/imagen.png");
+  }
    
- }
+  void limpiarLienzo(){
+    loadPixels();
+    for (int i= width * ((height/5)+1);i< pixels.length;i++){
+        pixels[i] = color(255);
+    }
+    updatePixels();
+    
+  }
+       
+  //Escribe texto en el lienzo
+  
+  
+ 
   
  void mousePressed(){
       //println("Entra mouse pressed");
       puntoOrigen = new Punto(mouseX,mouseY);
+      println("Punto origen x: "+puntoOrigen.getPosX());
+      println("Punto origen y: "+puntoOrigen.getPosY());
   }
   
   void mouseMoved(){
@@ -108,8 +116,8 @@ class Lienzo{
      }
      else if (editorGrafico.opcion == 3){
         puntoFinal = new Punto(mouseX,mouseY);
-        triX = puntoFinal.getPosX() - puntoOrigen.getPosX();
-        triY = puntoFinal.getPosY() - puntoOrigen.getPosY();
+        triX = puntoFinal.getPosX();
+        triY = puntoFinal.getPosY();
      }
      //Accion del borrador
      else if (editorGrafico.opcion == 4){
@@ -141,14 +149,18 @@ class Lienzo{
           stroke(selectedStroke.getRGB());
           strokeWeight(grosor);
           fill(selectedFill.getRGB(),255-alfa);
-          triangle(puntoOrigen.getPosX(),puntoOrigen.getPosY(),triX,triY,puntoFinal.getPosX(),puntoFinal.getPosY());
-          triX = 0;
-          triY = 0;
+          int triY2 = triY-50;
+          println("Triangulo final x: ",triX);
+          println("Triangulo final y: ",triY);
+          triangle(puntoOrigen.getPosX(),puntoOrigen.getPosY(),triX,triY,triX,triY2);
+          //puntoFinal.setPos(puntoOrigen.getPosX(),puntoOrigen.getPosY());
+          //triY2 = puntoFinal.getPosY();
+          //puntoOrigen.setPos(0,0);
+          //triX = 0;
+          //triY = 0;
+          //triY2 = 0;
         }
-     }
      
- 
-  }
-  
-  
-  
+     }
+    
+}

@@ -10,6 +10,13 @@ class Panel{
       altura = altPanel;
   }
   
+  public float getAltura(){
+     return altura; 
+  }
+  
+  public float getAnchura(){
+     return anchura; 
+  }
   void display(){
       fill(#5D92E5);
       rect(posX,posY,anchura,altura);
