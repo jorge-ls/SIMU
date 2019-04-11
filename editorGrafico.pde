@@ -7,7 +7,7 @@ JColorChooser paleta;
 Lienzo lienzo;
 Panel panel;
 Boton btnLapiz,btnElipse,btnRect,btnTriangle,btnFill,btnStroke,btnRubber,btnSave,btnOpen,btnText,btnBN,btnUmbral;
-Boton btnInvert,btnSatur,btnRestore,btnNew,btnTint,btnRecorte;
+Boton btnInvert,btnSatur,btnRestore,btnNew,btnTint,btnPixel;
 ArrayList<Boton> listaBtn;
 static int opcion = -1;
 File fichero;
@@ -59,8 +59,8 @@ void setup(){
     listaBtn.add(btnSatur);
     btnTint = new Boton(anchBoton*6,altBoton,anchBoton,altBoton,"Tinte","tinte.png");
     listaBtn.add(btnTint);
-    btnRecorte = new Boton(anchBoton*7,altBoton,anchBoton,altBoton,"Recorte","cut.png");
-    listaBtn.add(btnRecorte);
+    btnPixel = new Boton(anchBoton*7,altBoton,anchBoton,altBoton,"Pixel","pixel.png");
+    listaBtn.add(btnPixel);
     btnOpen = new Boton(anchBoton*8,altBoton,anchBoton,altBoton,"Open","openFile.png");
     listaBtn.add(btnOpen);
     
@@ -133,9 +133,7 @@ void keyPressed(){
     
       // En otro caso se concatena el caracter tecleado
       typing = typing + key; 
-  
-   
- }
+}
 
 void mousePressed(){
    lienzo.mousePressed(); 
@@ -148,13 +146,6 @@ void mouseReleased(){
    lienzo.mouseReleased(); 
 }
 
-void mouseMoved(){
-   if (editorGrafico.opcion == 4) {
-     //if (borrador.isDentroBorrador()){
-        //borrador.display(mouseX,mouseY);
-     //}
-   }
-}
 
 
 void checkCursor(){
@@ -163,7 +154,24 @@ void checkCursor(){
    }
 }
 
-
+void abrirFichero(){
+    
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.showOpenDialog(null);
+    //if (seleccion == JFileChooser.APROVE_OPTION){
+    fichero = fileChooser.getSelectedFile();
+    //}
+    if (fichero == null){
+        println("No se ha seleccionado ningun fichero"); 
+    }
+    else{
+        lienzo.limpiarLienzo();
+        imgSelected = loadImage(fichero.getAbsolutePath()); 
+        //image(imgSelected,0,height/5,width,height-height/5);
+        image(imgSelected,5,(height/5)+5);
+     }
+  
+}
 
 void mouseClicked(){
     if (btnLapiz.isDentroBoton()){
@@ -219,19 +227,7 @@ void mouseClicked(){
     else if (btnOpen.isDentroBoton()){
          checkCursor();
          //selectInput("Selecciona un fichero para abrir","file");
-         JFileChooser fileChooser = new JFileChooser();
-         fileChooser.showOpenDialog(null);
-         //if (seleccion == JFileChooser.APROVE_OPTION){
-         fichero = fileChooser.getSelectedFile();
-         //}
-         if (fichero == null){
-            println("No se ha seleccionado ningun fichero"); 
-         }
-         else{
-             imgSelected = loadImage(fichero.getAbsolutePath()); 
-             //image(imgSelected,0,height/5,width,height-height/5);
-             image(imgSelected,5,(height/5)+5);
-         }
+         abrirFichero();
      }
       else if (btnText.isDentroBoton()){
           checkCursor();
@@ -243,7 +239,8 @@ void mouseClicked(){
       else if (btnRestore.isDentroBoton()){
           checkCursor();
           if (imgSelected != null){
-              image(imgSelected,0,height/5);
+              lienzo.limpiarLienzo();
+              image(imgSelected,5,(height/5)+5);
           }
           
       }
@@ -268,6 +265,7 @@ void mouseClicked(){
       else if (btnInvert.isDentroBoton()){
            checkCursor();
            filter(INVERT);
+           //image(imgSelected,5,(height/5)+5);
       }
       else if (btnSatur.isDentroBoton()){
           checkCursor();
@@ -283,6 +281,7 @@ void mouseClicked(){
       }
       else if (btnTint.isDentroBoton()){
         checkCursor();
+        lienzo.limpiarLienzo();
         Color selectedColor = JColorChooser.showDialog(null,"Paleta de colores",Color.white);
         if (selectedColor != null){
             tint(selectedColor.getRGB());
@@ -292,12 +291,23 @@ void mouseClicked(){
              
         }
       }
-      else if (btnRecorte.isDentroBoton()){
+      else if (btnPixel.isDentroBoton()){
          checkCursor();
          if (imgSelected != null){
-             image(imgSelected,5,(height/5)+5,450,300);
-             PImage recorte = get(5,(height/5)+5,imgSelected.width/2,imgSelected.height/2);
-             image(recorte,imgSelected.width+10,(height/5)+5,200,250);
+           stroke(1);
+           lienzo.limpiarLienzo();
+           int resolution = 50;
+           int xInc = imgSelected.width/resolution;
+           int yInc = imgSelected.height/resolution;
+           for (int x = 5; x< imgSelected.width; x+=xInc ){
+              for (int y = (height/5)+5; y< imgSelected.height; y+=yInc ){
+                  fill(imgSelected.get(x, y));                   
+                  rect(x, y, xInc, yInc);
+              }
+           }
+           
+             
+             
          }
          
       }
