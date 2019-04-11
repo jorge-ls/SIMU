@@ -3,26 +3,32 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Color;
 
-JColorChooser paleta;
+JColorChooser paleta; //Selector de colores
 Lienzo lienzo;
 Panel panel;
-Boton btnLapiz,btnElipse,btnRect,btnTriangle,btnFill,btnStroke,btnRubber,btnSave,btnOpen,btnText,btnBN,btnUmbral;
-Boton btnInvert,btnSatur,btnRestore,btnNew,btnTint,btnPixel;
-ArrayList<Boton> listaBtn;
-static int opcion = -1;
+Boton btnLapiz,btnElipse,btnRect,btnTriangle,btnFill,btnStroke,btnRubber,btnSave,btnOpen,btnText,btnBN,btnUmbral; //botones
+Boton btnInvert,btnSatur,btnRestore,btnNew,btnTint,btnPixel; //botones
+ArrayList<Boton> listaBtn; //lista de botones
+static int opcion = -1; //Opcion seleccionada
 File fichero;
-PImage imgBorrador;
-PImage imgSelected;
-PFont f;
-int anchBoton = 60;
-int altBoton = 60;
-float x1 = 700;
+PImage imgBorrador; //Imagen que se establece en el cursor cuando se selecciona la opcion de borrar
+PImage imgSelected; // Imagen seleccionada
+PFont f; // Fuente del texto
+int anchBoton = 60; //Anchura de cada boton
+int altBoton = 60; // Altura de cada boton
+float x1 = 700; 
 float x2= 700;
-String typing = "";
-float grosor = 1;
-float alfa = 0;
+String typing = ""; //String donde se escribe el texto
+float grosor = 1; //Valor del grosor del trazo
+float alfa = 0; //Transparencia del color de relleno
 
 
+/**
+    Funcion setup : 
+              - Se establece a blanco el color de fondo y el tamaño de la ventana
+              - Se crean los botones y se añaden a la lista de botones
+              - Se establece la fuente para el texto
+**/
 void setup(){
     background(255);
     size(1000,600);
@@ -63,16 +69,18 @@ void setup(){
     listaBtn.add(btnPixel);
     btnOpen = new Boton(anchBoton*8,altBoton,anchBoton,altBoton,"Open","openFile.png");
     listaBtn.add(btnOpen);
-    
-    
-    
-    
     //Se dibuja el lienzo 
-    lienzo = new Lienzo(0,height/5,width,(height-height/5));
-    //lienzo.display();
+    lienzo = new Lienzo();
     f = createFont("Arial",16,true);
     textFont(f,16);
 }
+
+/**
+    Funcion draw:
+        - Se dibuja el panel principal
+        - Se dibujan los botones
+        - Se dibujan los scrollbars que controlan la transparencia del color y el grosor del trazo 
+**/
 
 void draw(){
     //background(255);
@@ -106,11 +114,17 @@ void draw(){
     
 }
 
+//Se comprueba si la posicion "y" del raton esta dentro del lienzo
 boolean isDentroLienzo(){
    return mouseY >= height/5; 
 }
 
-
+/**
+   Funcion de evento de raton 
+       - Se comprueba que la posicion del raton esta dentro del limite de los scrollbars y se 
+         asignan los valores de grosor y transparencia
+       - En otro caso se trazan las lineas y distintas figuras geometricas 
+**/
 void mouseDragged(){
     if (mouseX >= 700 && mouseY >=40 && mouseY <=60){
        checkCursor();
@@ -128,17 +142,20 @@ void mouseDragged(){
     
 }
 
+//Funcion de evento de raton : añade un caracter al texto que se escribe en el lienzo
+
 void keyPressed(){
-    // Si se pulsa return key se salva el string y se borra
-    
-      // En otro caso se concatena el caracter tecleado
       typing = typing + key; 
 }
+
+
+//Funcion que trata el evento de raton presionado  
 
 void mousePressed(){
    lienzo.mousePressed(); 
 }
 
+//Se establece la imagen del borrador en el cursor (si se selecciona la opcion de borrar) y se tratan otros casos
 void mouseReleased(){
    if (editorGrafico.opcion == 4){
       cursor(imgBorrador,10,10);
@@ -146,13 +163,15 @@ void mouseReleased(){
    lienzo.mouseReleased(); 
 }
 
-
+//Si esta seleccionada la opcion de borrar, reestablece el puntero del raton 
 
 void checkCursor(){
    if (editorGrafico.opcion == 4){
       cursor(ARROW); 
    }
 }
+
+//Funcion para seleccionar una imagen y mostrarla en el lienzo
 
 void abrirFichero(){
     
@@ -172,7 +191,10 @@ void abrirFichero(){
      }
   
 }
-
+/**
+  Funcion de evento de raton:
+      - En esta funcion se comprueba que boton ha sido pulsado y se realiza la accion asociada a ese boton 
+**/
 void mouseClicked(){
     if (btnLapiz.isDentroBoton()){
         print("Boton lapiz seleccionado\n");

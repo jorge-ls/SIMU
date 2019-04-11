@@ -2,32 +2,22 @@ import java.awt.Color;
 
 class Lienzo{
   
- float posX,posY;
- float anchura,altura;
- Punto puntoOrigen,puntoFinal;
- int elipseX,elipseY,recX,recY,triX,triY;
- Color selectedFill;
- Color selectedStroke;
- String typing = "";
- String saved = "";
- boolean dragged = false;
+ Punto puntoOrigen,puntoFinal; //Puntos para dibujar las figuras geometricas
+ int elipseX,elipseY,recX,recY,triX,triY; //Valores de las elipses,rectangulos y triangulos dibujados
+ Color selectedFill; //Color de relleno seleccionado
+ Color selectedStroke; // Color de trazo seleccionado
+ String typing = ""; //String que contiene el texto introducido
+ boolean dragged = false; //Booleano que comprueba si esta dibujando un triangulo
  
-  Lienzo(float posicionX,float posicionY,float ancLienzo,float altLienzo){
-    posX = posicionX;
-    posY = posicionY;
-    anchura = ancLienzo;
-    altura = altLienzo;
+ 
+  /**
+  *  Constructor de la clase Lienzo
+  **/
+  Lienzo(){
     selectedFill = Color.white;
     selectedStroke = Color.black;
     
   }
-  
-  
-  void setTam(float anchura,float altura){
-       this.anchura = anchura;
-       this.altura = altura;
-  }
-  
   
   //Se selecciona el color de relleno
   
@@ -54,9 +44,7 @@ class Lienzo{
      return selectedStroke; 
   }
   
-  /*void mouseClicked(){
-     
-  }*/
+  
   
   //Guarda la imagen 
   void saveImagen(){
@@ -69,6 +57,7 @@ class Lienzo{
       imagen.save("saves/imagen.png");
   }
    
+  //Limpia el lienzo
   void limpiarLienzo(){
     loadPixels();
     for (int i= width * ((height/5)+1);i< pixels.length;i++){
@@ -78,11 +67,7 @@ class Lienzo{
     
   }
   
-       
-  //Escribe texto en el lienzo
-  
-  
- 
+ // Se crea el punto origen de la figura geometrica a dibujar
   
  void mousePressed(){
       //println("Entra mouse pressed");
@@ -91,13 +76,11 @@ class Lienzo{
       println("Punto origen y: "+puntoOrigen.getPosY());
   }
   
-  void mouseMoved(){
-     
-  }
-  
-  
+ 
+  //Se implementan las distintas opciones que requieren el "arrastre" del raton
  
  void mouseDragged(){
+     //Se traza una linea
      if (editorGrafico.opcion == 0){
        if (isDentroLienzo()){
            stroke(selectedStroke.getRGB());
@@ -106,6 +89,7 @@ class Lienzo{
        }
         
      }
+     //Se establece el tamaño de la elipse
      else if (editorGrafico.opcion == 1){
         puntoFinal = new Punto(mouseX,mouseY);
         elipseX = puntoFinal.getPosX() - puntoOrigen.getPosX();
@@ -113,11 +97,13 @@ class Lienzo{
         //println("PuntoFinal.x: "+elipseX);
         //println("PuntoFinal.y: "+elipseY);
      }
+     //Se establece el tamaño del rectangulo
      else if (editorGrafico.opcion == 2){
         puntoFinal = new Punto(mouseX,mouseY);
         recX = puntoFinal.getPosX() - puntoOrigen.getPosX();
         recY = puntoFinal.getPosY() - puntoOrigen.getPosY();
      }
+     //Se establece el punto final del triangulo
      else if (editorGrafico.opcion == 3){
         puntoFinal = new Punto(mouseX,mouseY);
         triX = puntoFinal.getPosX();
@@ -132,7 +118,11 @@ class Lienzo{
          line(mouseX,mouseY,pmouseX,pmouseY);  
      }
   }
+  
+    //Se tratan las distintas opciones que requieren que se suelte el boton del raton
+    
      void mouseReleased(){
+       // Se dibuja la elipse cuando su tamaño ya ha sido establecido
         if (editorGrafico.opcion == 1){
           stroke(selectedStroke.getRGB());
           strokeWeight(grosor);
@@ -142,6 +132,7 @@ class Lienzo{
           elipseX = 0;
           elipseY = 0;
         }
+        //Se dibuja el rectangulo cuando su tamaño ya ha sido establecido
         else if (editorGrafico.opcion == 2){
           stroke(selectedStroke.getRGB());
           strokeWeight(grosor);
@@ -150,6 +141,7 @@ class Lienzo{
           recX = 0;
           recY = 0;
         }
+        //Se dibuja el triangulo
         else if (editorGrafico.opcion == 3){
           stroke(selectedStroke.getRGB());
           strokeWeight(grosor);
@@ -161,12 +153,7 @@ class Lienzo{
               triangle(puntoOrigen.getPosX(),puntoOrigen.getPosY(),triX,triY,triX,triY2);  
           }
           dragged = false;
-          //puntoFinal.setPos(puntoOrigen.getPosX(),puntoOrigen.getPosY());
-          //triY2 = puntoFinal.getPosY();
-          //puntoOrigen.setPos(0,0);
-          //triX = 0;
-          //triY = 0;
-          //triY2 = 0;
+          
         }
      
      }

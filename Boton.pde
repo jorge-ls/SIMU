@@ -6,6 +6,16 @@ class Boton {
   String texto;
   String nombreImg;
   
+  /**
+  * Contructor de la clase Boton
+  * @param pX Coordenada x del boton
+  * @param pY Coordenada y del boton
+  * @param anchuraBtn Anchura del boton
+  * @param alturaBtn Altura del boton
+  * @param textoBtn Texto identificador del boton
+  * @param nombreImgBtn Nombre de la imagen asociada al boton 
+  *
+  **/
   
   Boton(float pX,float pY,float anchuraBtn,float alturaBtn,String textoBtn,String nombreImgBtn){
     posX = pX;
@@ -16,11 +26,8 @@ class Boton {
     nombreImg = nombreImgBtn;
   }
   
-  /*void displayEtiqueta(){
-     fill(#E7ED48,255);
-     rect(posX+anchura/2,posY+altura/2,anchura,20);
-  }*/
   
+  //Funcion que dibuja el boton, si el cursor esta sobre el boton se dibuja con un color diferente
   void display(){
     if (this.isDentroBoton()){
        fill(230);
@@ -28,7 +35,6 @@ class Boton {
     else{
       fill(200);  
     }
-    
     stroke(0);
     rect(posX,posY,anchura,altura);
     PImage img = loadImage(nombreImg);
@@ -36,13 +42,12 @@ class Boton {
     //Falta por poner el texto
   }
   
- 
+  //Funcion que comprueba si el cursor esta dentro de los limites establecidos por el boton
+  
   boolean isDentroBoton(){
       if (mouseX > posX && mouseX < anchura +posX && mouseY > posY && mouseY < altura + posY){
-         //print("Entra true\n");
          return true; 
       }
-      //print("Entra false\n");
       return false;
   }
   
