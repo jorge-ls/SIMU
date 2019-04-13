@@ -6,7 +6,6 @@ class Lienzo{
  int elipseX,elipseY,recX,recY,triX,triY; //Valores de las elipses,rectangulos y triangulos dibujados
  Color selectedFill; //Color de relleno seleccionado
  Color selectedStroke; // Color de trazo seleccionado
- String typing = ""; //String que contiene el texto introducido
  boolean dragged = false; //Booleano que comprueba si esta dibujando un triangulo
  
  
@@ -72,8 +71,7 @@ class Lienzo{
  void mousePressed(){
       //println("Entra mouse pressed");
       puntoOrigen = new Punto(mouseX,mouseY);
-      println("Punto origen x: "+puntoOrigen.getPosX());
-      println("Punto origen y: "+puntoOrigen.getPosY());
+      loadPixels();
   }
   
  
@@ -102,6 +100,7 @@ class Lienzo{
         puntoFinal = new Punto(mouseX,mouseY);
         recX = puntoFinal.getPosX() - puntoOrigen.getPosX();
         recY = puntoFinal.getPosY() - puntoOrigen.getPosY();
+        
      }
      //Se establece el punto final del triangulo
      else if (editorGrafico.opcion == 3){
